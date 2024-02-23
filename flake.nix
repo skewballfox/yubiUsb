@@ -6,6 +6,7 @@
     # this should work. see https://discourse.nixos.org/t/flakes-re-locking-necessary-at-each-evaluation-when-import-sub-flake-by-path/34465/6
     #localConfig.url = "path:.config";
     localConfig.url = "git+file:.?dir=./.config";
+    localConfig.flake = false;
     drduhConfig.flake = false;
   };
 
