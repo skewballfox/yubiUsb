@@ -96,8 +96,9 @@
                     bind \cc kill-whole-line repaint
                     bind \cd forward-char
                   '';
-                  man.generate.
+                  
                 };
+                man.generateCaches=true;
                 
               };
 
