@@ -96,6 +96,7 @@
                     bind \cc kill-whole-line repaint
                     bind \cd forward-char
                   '';
+                  man.generate.
                 };
                 
               };
@@ -180,7 +181,9 @@
                 wireless.enable = false;
                 networkmanager.enable = lib.mkForce false;
               };
-
+              environment.pathsToLink = [
+                "/share/fish"
+              ];
               # Unset history so it's never stored Set GNUPGHOME to an
               # ephemeral location and configure GPG with the guide's
 
