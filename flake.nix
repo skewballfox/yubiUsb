@@ -78,12 +78,12 @@
                 export WLR_NO_HARDWARE_CURSORS=1
                 export GBM_BACKEND=nvidia-drm
                 export __GLX_VENDOR_LIBRARY_NAME=nvidia
-    	          exec swayfx --unsupported-gpu
+    	          exec sway --unsupported-gpu
               else
 	              # Used to avoid showing a corrupted image on startup with the nouveau drivers
 	              # for some reason causes sway to dump core with nvidia drivers
 	              export WLR_DRM_NO_MODIFIERS=1
-                exec swayfx
+                exec sway
               fi
               '';
               shortcut = pkgs.makeDesktopItem {
@@ -126,7 +126,19 @@
                 # Automatically log in at the virtual consoles.
                 getty.autologinUser = "nixos";
                 
+                dbus.enable = true;
+                pipewire = {
+                  enable = true;
+                  alsa.enable = true;
+                  alsa.support32Bit = true;
+                  pulse.enable = true;
+                };
                 
+                
+              };
+              xdg.portal = {
+                enable = true;
+                extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
               };
             #   documentation.enable = true;
             #   documentation.man = {
@@ -142,6 +154,8 @@
                   enable = true;
                   enableSSHSupport = true;
                 };
+                sway.enable = true;
+
                 
                 # fish = {
                 #   enable = true;
@@ -174,6 +188,7 @@
                   enable = true;
                   wheelNeedsPassword = false;
                 };
+                rtkit.enable = true;
               };
 
               environment.systemPackages = with pkgs; [
