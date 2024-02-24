@@ -21,6 +21,7 @@
       nixpkgs.lib.nixosSystem {
         inherit system;
         modules = [
+          
           "${nixpkgs}/nixos/modules/profiles/all-hardware.nix"
           "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
           (
@@ -82,13 +83,14 @@
                 getty.autologinUser = "nixos";
                 
               };
-
+              documentation.man.generateCaches = true;
               programs = {
                 ssh.startAgent = false;
                 gnupg.agent = {
                   enable = true;
                   enableSSHSupport = true;
                 };
+                
                 fish = {
                   enable = true;
                   interactiveShellInit = ''
@@ -98,8 +100,7 @@
                   '';
                   
                 };
-                man.enable = true;
-                man.generateCaches = true;
+                
                 
               };
 
