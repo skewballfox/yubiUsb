@@ -42,6 +42,50 @@
                 fi
                 exec $viewer "${self}/README.md"
               '';
+              swayStart = pkgs.writeShellScriptBin "swaystart" ''
+              export XDG_DATA_HOME="$HOME/.local/share"
+              export QT_QPA_PLATFORM=wayland
+              export QT_QPA_PLATFORMTHEME=qt5ct
+              export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+              export GDK_BACKEND=wayland
+              #NOTE: Simple DirectMedia Layer
+              export SDL_VIDEODRIVER=wayland
+
+              #so thunderbird-wayland will actually use wayland
+              export MOZ_ENABLE_WAYLAND=1
+              #think it's used for obs studio
+              export MOZ_WEBRENDER=1
+
+              # for IntelliJ, Android Studio, etc
+              # https://stackoverflow.com/questions/33424736/intellij-idea-14-on-arch-linux-opening-to-grey-screen/34419927#34419927
+              export _JAVA_AWT_WM_NONREPARENTING=1
+
+              #necessary for tumbler apparently
+              export XDG_CACHE_HOME=$HOME/.cache
+              
+              #stuff to try to get gnome-pinentry and seahorse
+              #to properly work
+              export XDG_CURRENT_DESKTOP=sway
+              export XDG_SESSION_DESKTOP=sway
+              export XDG_SESSION_TYPE=wayland
+              export CURRENT_DESKTOP=sway
+
+              # Vukan rendering for wlroots
+              # NOTE: requires vulkan-validation-layers
+              # https://wiki.archlinux.org/title/sway#Use_another_wlroots_renderersw
+              export WLR_RENDERER=vulkan
+              if [[ $driver == "nvidia" ]]; then
+                export WLR_NO_HARDWARE_CURSORS=1
+                export GBM_BACKEND=nvidia-drm
+                export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    	          exec swayfx --unsupported-gpu
+              else
+	              # Used to avoid showing a corrupted image on startup with the nouveau drivers
+	              # for some reason causes sway to dump core with nvidia drivers
+	              export WLR_DRM_NO_MODIFIERS=1
+                exec swayfx
+              fi
+              '';
               shortcut = pkgs.makeDesktopItem {
                 name = "yubikey-guide";
                 icon = "${pkgs.yubikey-manager-qt}/share/ykman-gui/icons/ykman.png";
@@ -82,8 +126,16 @@
                 # Automatically log in at the virtual consoles.
                 getty.autologinUser = "nixos";
                 
+                
               };
-              documentation.man.generateCaches = true;
+            #   documentation.enable = true;
+            #   documentation.man = {
+            #     enable = true;
+            #     generateCaches = true;
+            # };
+              # Programs to be configured
+              # for the difference between `programs` and `environment.systemPackages`
+              # see https://discourse.nixos.org/t/programs-foo-enable-true-vs-systempackages-foo-is-confusing/5534
               programs = {
                 ssh.startAgent = false;
                 gnupg.agent = {
@@ -91,15 +143,15 @@
                   enableSSHSupport = true;
                 };
                 
-                fish = {
-                  enable = true;
-                  interactiveShellInit = ''
-                    set -g fish_key_bindings fish_default_key_bindings
-                    bind \cc kill-whole-line repaint
-                    bind \cd forward-char
-                  '';
+                # fish = {
+                #   enable = true;
+                #   interactiveShellInit = ''
+                #     set -g fish_key_bindings fish_default_key_bindings
+                #     bind \cc kill-whole-line repaint
+                #     bind \cd forward-char
+                #   '';
                   
-                };
+                # };
                 
                 
               };
@@ -128,10 +180,12 @@
 
                 # if a gui is needed
                 swayfx
+                swayStart
                 kitty
                 starship
                 glow
                 i3status-rust
+                vulkan-validation-layers
 
                 # Tools for backing up keys
                 paperkey
@@ -164,6 +218,12 @@
                 gopass
                 fish
                 helix
+                atuin
+
+                # # to get fish to build
+                # linux-manual
+                # man-pages
+                # man-pages-posix
 
                 # This guide itself (run `view-yubikey-guide` on the terminal
                 # to open it in a non-graphical environment).
