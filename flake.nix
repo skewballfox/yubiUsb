@@ -97,6 +97,7 @@
                   isNormalUser = true;
                   extraGroups = ["wheel" "video"];
                   initialHashedPassword = "";
+                  shell = pkgs.fish;
                 };
                 root.initialHashedPassword = "";
               };
