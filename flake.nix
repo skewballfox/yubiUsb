@@ -98,7 +98,8 @@
                   '';
                   
                 };
-                man.generateCaches=true;
+                man.enable = true;
+                man.generateCaches = true;
                 
               };
 
