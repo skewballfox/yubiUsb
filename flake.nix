@@ -89,7 +89,15 @@
                   enable = true;
                   enableSSHSupport = true;
                 };
-                fish.enable = true;
+                fish = {
+                  enable = true;
+                  interactiveShellInit = ''
+                    set -g fish_key_bindings fish_default_key_bindings
+                    bind \cc kill-whole-line repaint
+                    bind \cd forward-char
+                  '';
+                };
+                
               };
 
               # Use less privileged nixos user
