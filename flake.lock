@@ -1,0 +1,61 @@
+{
+  "nodes": {
+    "drduhConfig": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1707605382,
+        "narHash": "sha256-0+Rv1BGPO40twnc5BpqjM1GroIqa2+vdsyiz3kae+C0=",
+        "owner": "drduh",
+        "repo": "config",
+        "rev": "7c26aa46c9fa60c536cdd3602b136bd4749e48f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "drduh",
+        "repo": "config",
+        "type": "github"
+      }
+    },
+    "localConfig": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1708793273,
+        "narHash": "sha256-Y+fba2KTcthK5/MRDw5kz35T5rLizjsR9naE0XUYoZU=",
+        "owner": "skewballfox",
+        "repo": "live_config",
+        "rev": "0e542a64498f2c51723f18ce2836dbb59518210a",
+        "type": "github"
+      },
+      "original": {
+        "owner": "skewballfox",
+        "repo": "live_config",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1708702655,
+        "narHash": "sha256-qxT5jSLhelfLhQ07+AUxSTm1VnVH+hQxDkQSZ/m/Smo=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c5101e457206dd437330d283d6626944e28794b3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "drduhConfig": "drduhConfig",
+        "localConfig": "localConfig",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
