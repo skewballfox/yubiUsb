@@ -113,6 +113,23 @@
                 makeUsbBootable = true; # USB booting
               };
 
+              hardware = {
+                cpu.amd.updateMicrocode = true;
+                #enableAllFirmware = true;
+                enableRedistributableFirmware = true;
+                opengl = {
+                  enable = true;
+                  driSupport = true;
+                  driSupport32Bit = true;
+                  extraPackages = [ pkgs.vulkan-validation-layers pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+                };
+                # nvidia = {
+                #   package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
+                #   #package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_production_open;
+                #   open = true;
+                # };
+                
+              };
               swapDevices = [];
 
               boot = {
@@ -132,6 +149,11 @@
                   alsa.enable = true;
                   alsa.support32Bit = true;
                   pulse.enable = true;
+                };
+                xserver = {
+                  enable = true;
+                  videoDrivers = [ "amdgpu" "modesetting" "fbdev" ];
+                  
                 };
                 
                 
@@ -154,7 +176,12 @@
                   enable = true;
                   enableSSHSupport = true;
                 };
-                sway.enable = true;
+                sway= {
+                  enable = true;
+                  wrapperFeatures.base = true;
+                  wrapperFeatures.gtk = true;
+
+                };
 
                 
                 # fish = {
@@ -201,7 +228,17 @@
                 glow
                 i3status-rust
                 vulkan-validation-layers
-
+                vulkan-tools
+                vulkan-loader
+                libva
+                libva-utils
+                
+                wayland
+                mesa
+                 # VAAPI
+                vaapiVdpau
+                libvdpau-va-gl
+                
                 # Tools for backing up keys
                 paperkey
                 pgpdump
@@ -286,7 +323,7 @@
                 desktopDir = homeDir + "Desktop/";
                 documentsDir = homeDir + "Documents/";
               in ''
-                mkdir -p ${desktopDir} ${documentsDir}
+                mkdir -p ${desktopDir} ${documentsDir} ${configDir}
                 chown nixos ${homeDir} ${desktopDir} ${documentsDir}
                 cp -R ${localConfig} ${configDir}
                 cp -R ${self}/contrib/* ${homeDir}
