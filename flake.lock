@@ -19,14 +19,17 @@
     "localConfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-NHbjzTEAVMKV0G/Oswu2JH9LziPQUJyf5KVENYjXkf8=",
-        "path": "config",
-        "type": "path"
+        "lastModified": 1709496933,
+        "narHash": "sha256-2Dfg36Jr/11Y5zYi2gni7WA+ATyo+/pW7wErksARlcw=",
+        "owner": "skewballfox",
+        "repo": "live_config",
+        "rev": "8d33f0d3d1384527c84fddde10eb20b557b7e844",
+        "type": "github"
       },
       "original": {
-        "path": "config",
-        "type": "path"
+        "owner": "skewballfox",
+        "repo": "live_config",
+        "type": "github"
       }
     },
     "nixpkgs": {
