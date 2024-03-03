@@ -222,15 +222,21 @@
                 };
 
                 
-                # fish = {
-                #   enable = true;
-                #   interactiveShellInit = ''
-                #     set -g fish_key_bindings fish_default_key_bindings
-                #     bind \cc kill-whole-line repaint
-                #     bind \cd forward-char
-                #   '';
-                  
-                # };
+               font.packages = with pkgs; [
+                fonts
+                fira-code
+                fira
+                font-awesome
+                cooper-hewitt
+                ibm-plex
+                jetbrains-mono
+                iosevka
+                # bitmap
+                spleen
+                fira-code-symbols
+                powerline-fonts
+                nerdfonts
+               ];
                 
                 
               };
@@ -327,19 +333,7 @@
                 helix
                 atuin
 
-                #fonts
-                fira-code
-                fira
-                font-awesome
-                cooper-hewitt
-                ibm-plex
-                jetbrains-mono
-                iosevka
-                # bitmap
-                spleen
-                fira-code-symbols
-                powerline-fonts
-                nerdfonts
+                
 
                 # # to get fish to build
                 # linux-manual
