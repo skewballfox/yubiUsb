@@ -24,6 +24,7 @@
           
           "${nixpkgs}/nixos/modules/profiles/all-hardware.nix"
           "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
+          #"${nixpkgs}/nixos/modules/installer/virtualization/qemu-vm.nix"
           (
             {
               lib,
@@ -99,6 +100,7 @@
                 name = "yubikey-guide";
                 paths = [viewYubikeyGuide shortcut];
               };
+              
             in {
               isoImage = {
                 isoName = "yubikeyLive.iso";
@@ -121,7 +123,11 @@
                   enable = true;
                   driSupport = true;
                   driSupport32Bit = true;
-                  extraPackages = [ pkgs.vulkan-validation-layers pkgs.vaapiVdpau pkgs.libvdpau-va-gl ];
+                  extraPackages = with pkgs; [ amdvlk vulkan-validation-layers vaapiVdpau libvdpau-va-gl ];
+                  # For 32 bit applications 
+                  extraPackages32 = with pkgs; [
+                    driversi686Linux.amdvlk
+                  ];
                 };
                 # nvidia = {
                 #   package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
@@ -132,10 +138,10 @@
               };
               swapDevices = [];
 
-              boot = {
-                tmp.cleanOnBoot = true;
-                kernel.sysctl = {"kernel.unprivileged_bpf_disabled" = 1;};
-              };
+              boot.tmp.cleanOnBoot = true;
+              boot.kernel.sysctl = {"kernel.unprivileged_bpf_disabled" = 1;};
+              boot.initrd.network.enable = false;
+              #boot.initrd.kernelModules = [ "amdgpu" ];
 
               services = {
                 pcscd.enable = true;
@@ -152,7 +158,7 @@
                 };
                 xserver = {
                   enable = true;
-                  videoDrivers = [ "amdgpu" "modesetting" "fbdev" ];
+                  videoDrivers = [ "modesetting" "fbdev" "amdgpu" ];
                   
                 };
                 
@@ -219,6 +225,8 @@
               };
 
               environment.systemPackages = with pkgs; [
+                # for debugging
+                pciutils
 
                 # if a gui is needed
                 swayfx
@@ -284,7 +292,7 @@
 
               # Disable networking so the system is air-gapped
               # Comment all of these lines out if you'll need internet access
-              boot.initrd.network.enable = false;
+              
               networking = {
                 resolvconf.enable = false;
                 dhcpcd.enable = false;
@@ -338,6 +346,7 @@
   in {
     nixosConfigurations.yubikeyLive.x86_64-linux = mkSystem "x86_64-linux";
     nixosConfigurations.yubikeyLive.aarch64-linux = mkSystem "aarch64-linux";
+    #nixosConfigurations.yubikeyLive.qemu = mkSystem
     formatter.x86_64-linux = (import nixpkgs {system = "x86_64-linux";}).alejandra;
     formatter.aarch64-linux = (import nixpkgs {system = "aarch64-linux";}).alejandra;
   };
