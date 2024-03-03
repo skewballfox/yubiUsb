@@ -83,7 +83,7 @@
                 if [ -z "$viewer" ]; then
                   viewer="${pkgs.glow}/bin/glow -p"
                 fi
-                exec $viewer "${self}/README.md"
+                exec $viewer "${self}/drduh/README.md"
               '';
               shortcut = pkgs.makeDesktopItem {
                 name = "yubikey-guide";
@@ -220,9 +220,9 @@
                   export WLR_RENDERER=vulkan
                   '';
                 };
+              };
 
-                
-               font.packages = with pkgs; [
+              fonts.packages = with pkgs; [
                 fira-code
                 fira
                 font-awesome
@@ -236,9 +236,6 @@
                 powerline-fonts
                 nerdfonts
                ];
-                
-                
-              };
 
               # Use less privileged nixos user
               users.users = {
@@ -386,9 +383,9 @@
                 documentsDir = homeDir + "Documents/";
               in ''
                 mkdir -p ${desktopDir} ${documentsDir} ${configDir}
-                chown nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
+                chown -R nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
                 cp -R ${localConfig}/config/* ${configDir}
-                cp -R ${self}/contrib/* ${homeDir}
+                cp -R ${self}/drduh/* ${homeDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
                 ln -sfT ${self} ${documentsDir}/YubiKey-Guide
               '';
