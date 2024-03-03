@@ -335,7 +335,7 @@
                 desktopDir = homeDir + "Desktop/";
                 documentsDir = homeDir + "Documents/";
               in ''
-                mkdir -p ${desktopDir} ${documentsDir} 
+                mkdir -p ${desktopDir} ${documentsDir} ${configDir}
                 chown nixos ${homeDir} ${desktopDir} ${documentsDir}
                 cp -R ${localConfig}/config ${configDir}
                 cp -R ${self}/contrib/* ${homeDir}
