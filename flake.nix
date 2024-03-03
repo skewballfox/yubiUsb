@@ -283,7 +283,7 @@
                 #fonts
                 fira-code
                 fira
-                fontawesome
+                font-awesome
                 cooper-hewitt
                 ibm-plex
                 jetbrains-mono
