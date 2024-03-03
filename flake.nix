@@ -337,7 +337,7 @@
               in ''
                 mkdir -p ${desktopDir} ${documentsDir} ${configDir}
                 chown nixos ${homeDir} ${desktopDir} ${documentsDir}
-                cp -R ${localConfig}/config ${configDir}
+                cp -R ${localConfig}/* ${configDir}
                 cp -R ${self}/contrib/* ${homeDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
                 ln -sfT ${self} ${documentsDir}/YubiKey-Guide
