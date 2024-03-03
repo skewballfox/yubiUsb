@@ -37,6 +37,47 @@
                 sed '/pinentry-program/d' ${drduhConfig}/gpg-agent.conf > $out
                 echo "pinentry-program ${pkgs.pinentry.curses}/bin/pinentry" >> $out
               '';
+              sway-cwd-term = pkgs.writeShellScriptBin "sway-cwd-term" ''
+                #!/usr/bin/env bash
+                # Open a new terminal in the current working directory of a focused terminal
+                terminal="kitty"
+
+                cwd="$(swaymsg -t get_tree |
+                  jq '.. | (.nodes? // empty)[] | select(.focused == true).pid? // empty' |
+                  xargs pstree -p | rg 'tmux|fish|bash|zsh|sh' |
+                  rg -o '[0-9]*' | xargs pwdx 2>/dev/null | cut -f2- -d' ' |
+                  sort | tail -n 1 | tr -d '\n')"
+
+                if [ -d "$cwd" ]; then
+                  $terminal -d "$cwd" --debug-gl --debug-rendering &
+                  disown
+                else
+                  $terminal --debug-gl --debug-rendering &
+                  disown
+                fi
+                '';
+              sway_screenlock = pkgs.writeShellScriptBin "sway_screenlock" ''
+                #!/usr/bin/dash
+                  dir="$(mktemp -d)"
+                  trap '{ rm -r "''${dir?}"; return $?; }' INT EXIT
+
+                  swaymsg -t get_outputs | jq -r '.[]|select(.active).name' | {
+                    while read -r output; do
+                      # ppm is a bitmapped format supported by grim, convert, and swaylock
+                      img="$dir/$output.ppm"
+                      (
+                        grim -o "$output" -t ppm - | ffmpeg  -i pipe: -filter_complex boxblur=lr=20:lp=2 -y "$img"
+                              convert "$img" -gravity center ~/.config/sway/rocinante_by_imajinn_design_dbwhmwb-fullview.png -composite "$img"
+                      ) &
+                      lock_args="--image=$output:$img $lock_args"
+                    done
+                    wait
+
+                    set -f # suppress globbing
+                    #shellcheck disable=2086
+                    swaylock $lock_args
+                  }
+                '';
               viewYubikeyGuide = pkgs.writeShellScriptBin "view-yubikey-guide" ''
                 viewer="$(type -P xdg-open || true)"
                 if [ -z "$viewer" ]; then
@@ -225,8 +266,13 @@
                 # if a gui is needed
                 swayfx
                 kitty
-                
+                sway-cwd-term
+                kickoff
                 i3status-rust
+                sway_screenlock
+                
+
+                # for graphics
                 vulkan-validation-layers
                 vulkan-tools
                 vulkan-loader
@@ -240,6 +286,7 @@
                 ripgrep
                 findutils
                 jq
+                dash
 
                 wayland
                 mesa
