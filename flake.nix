@@ -5,8 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     drduhConfig.url = "github:drduh/config";
     # this should work. see https://discourse.nixos.org/t/flakes-re-locking-necessary-at-each-evaluation-when-import-sub-flake-by-path/34465/6
-    #localConfig.url = "github:skewballfox/live_config";
-    localConfig.url = "path:config";
+    localConfig.url = "github:skewballfox/live_config";
+    #localConfig.url = "path:config";
     localConfig.flake = false;
     drduhConfig.flake = false;
   };
@@ -216,15 +216,16 @@
               };
 
               environment.systemPackages = with pkgs; [
+                #probably already included
+                coreutils
+
                 # for debugging
                 pciutils
 
                 # if a gui is needed
                 swayfx
                 kitty
-                starship
-                glow
-                bat
+                
                 i3status-rust
                 vulkan-validation-layers
                 vulkan-tools
@@ -232,6 +233,14 @@
                 libva
                 libva-utils
                 
+                # terminal porn
+                starship
+                glow
+                bat
+                ripgrep
+                findutils
+                jq
+
                 wayland
                 mesa
                  # VAAPI
@@ -274,6 +283,7 @@
                 #fonts
                 fira-code
                 fira
+                fontawesome
                 cooper-hewitt
                 ibm-plex
                 jetbrains-mono
@@ -336,8 +346,8 @@
                 documentsDir = homeDir + "Documents/";
               in ''
                 mkdir -p ${desktopDir} ${documentsDir} ${configDir}
-                chown nixos ${homeDir} ${desktopDir} ${documentsDir}
-                cp -R ${localConfig}/* ${configDir}
+                chown nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
+                cp -R ${localConfig}/config/* ${configDir}
                 cp -R ${self}/contrib/* ${homeDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
                 ln -sfT ${self} ${documentsDir}/YubiKey-Guide
