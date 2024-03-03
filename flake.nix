@@ -23,6 +23,7 @@
         modules = [
           
           "${nixpkgs}/nixos/modules/profiles/all-hardware.nix"
+          "${nixpkgs}/nixos/modules/hardware/all-firmware.nix"
           "${nixpkgs}/nixos/modules/installer/cd-dvd/iso-image.nix"
           #"${nixpkgs}/nixos/modules/installer/virtualization/qemu-vm.nix"
           (
@@ -42,50 +43,6 @@
                   viewer="${pkgs.glow}/bin/glow -p"
                 fi
                 exec $viewer "${self}/README.md"
-              '';
-              swayStart = pkgs.writeShellScriptBin "swaystart" ''
-              export XDG_DATA_HOME="$HOME/.local/share"
-              export QT_QPA_PLATFORM=wayland
-              export QT_QPA_PLATFORMTHEME=qt5ct
-              export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
-              export GDK_BACKEND=wayland
-              #NOTE: Simple DirectMedia Layer
-              export SDL_VIDEODRIVER=wayland
-
-              #so thunderbird-wayland will actually use wayland
-              export MOZ_ENABLE_WAYLAND=1
-              #think it's used for obs studio
-              export MOZ_WEBRENDER=1
-
-              # for IntelliJ, Android Studio, etc
-              # https://stackoverflow.com/questions/33424736/intellij-idea-14-on-arch-linux-opening-to-grey-screen/34419927#34419927
-              export _JAVA_AWT_WM_NONREPARENTING=1
-
-              #necessary for tumbler apparently
-              export XDG_CACHE_HOME=$HOME/.cache
-              
-              #stuff to try to get gnome-pinentry and seahorse
-              #to properly work
-              export XDG_CURRENT_DESKTOP=sway
-              export XDG_SESSION_DESKTOP=sway
-              export XDG_SESSION_TYPE=wayland
-              export CURRENT_DESKTOP=sway
-
-              # Vukan rendering for wlroots
-              # NOTE: requires vulkan-validation-layers
-              # https://wiki.archlinux.org/title/sway#Use_another_wlroots_renderersw
-              export WLR_RENDERER=vulkan
-              if [[ $driver == "nvidia" ]]; then
-                export WLR_NO_HARDWARE_CURSORS=1
-                export GBM_BACKEND=nvidia-drm
-                export __GLX_VENDOR_LIBRARY_NAME=nvidia
-    	          exec sway --unsupported-gpu
-              else
-	              # Used to avoid showing a corrupted image on startup with the nouveau drivers
-	              # for some reason causes sway to dump core with nvidia drivers
-	              export WLR_DRM_NO_MODIFIERS=1
-                exec sway
-              fi
               '';
               shortcut = pkgs.makeDesktopItem {
                 name = "yubikey-guide";
@@ -137,11 +94,12 @@
                 
               };
               swapDevices = [];
-
+              
+              boot.kernelPackages = pkgs.linuxPackages_latest;
               boot.tmp.cleanOnBoot = true;
               boot.kernel.sysctl = {"kernel.unprivileged_bpf_disabled" = 1;};
               boot.initrd.network.enable = false;
-              #boot.initrd.kernelModules = [ "amdgpu" ];
+              boot.initrd.kernelModules = [ "amdgpu" ];
 
               services = {
                 pcscd.enable = true;
@@ -159,7 +117,7 @@
                 xserver = {
                   enable = true;
                   videoDrivers = [ "modesetting" "fbdev" "amdgpu" ];
-                  
+                  libinput.enable = true;
                 };
                 
                 
@@ -186,7 +144,39 @@
                   enable = true;
                   wrapperFeatures.base = true;
                   wrapperFeatures.gtk = true;
+                  extraSessionCommands = ''
+                  export XDG_DATA_HOME="$HOME/.local/share"
+                  export QT_QPA_PLATFORM=wayland
+                  export QT_QPA_PLATFORMTHEME=qt5ct
+                  export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+                  export GDK_BACKEND=wayland
+                  #NOTE: Simple DirectMedia Layer
+                  export SDL_VIDEODRIVER=wayland
 
+                  #so thunderbird-wayland will actually use wayland
+                  export MOZ_ENABLE_WAYLAND=1
+                  #think it's used for obs studio
+                  export MOZ_WEBRENDER=1
+
+                  # for IntelliJ, Android Studio, etc
+                  # https://stackoverflow.com/questions/33424736/intellij-idea-14-on-arch-linux-opening-to-grey-screen/34419927#34419927
+                  export _JAVA_AWT_WM_NONREPARENTING=1
+
+                  #necessary for tumbler apparently
+                  export XDG_CACHE_HOME=$HOME/.cache
+                  
+                  #stuff to try to get gnome-pinentry and seahorse
+                  #to properly work
+                  export XDG_CURRENT_DESKTOP=sway
+                  export XDG_SESSION_DESKTOP=sway
+                  export XDG_SESSION_TYPE=wayland
+                  export CURRENT_DESKTOP=sway
+
+                  # Vukan rendering for wlroots
+                  # NOTE: requires vulkan-validation-layers
+                  # https://wiki.archlinux.org/title/sway#Use_another_wlroots_renderersw
+                  export WLR_RENDERER=vulkan
+                  '';
                 };
 
                 
