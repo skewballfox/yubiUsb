@@ -223,7 +223,6 @@
 
                 
                font.packages = with pkgs; [
-                fonts
                 fira-code
                 fira
                 font-awesome
