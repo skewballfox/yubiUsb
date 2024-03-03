@@ -5,8 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
     drduhConfig.url = "github:drduh/config";
     # this should work. see https://discourse.nixos.org/t/flakes-re-locking-necessary-at-each-evaluation-when-import-sub-flake-by-path/34465/6
-    localConfig.url = "github:skewballfox/live_config";
-    #localConfig.url = "git+file:?dir=./config";
+    #localConfig.url = "github:skewballfox/live_config";
+    localConfig.url = "path:config";
     localConfig.flake = false;
     drduhConfig.flake = false;
   };
@@ -126,6 +126,7 @@
                 enable = true;
                 extraPortals = [ pkgs.xdg-desktop-portal-wlr ];
               };
+              
             #   documentation.enable = true;
             #   documentation.man = {
             #     enable = true;
@@ -220,10 +221,10 @@
 
                 # if a gui is needed
                 swayfx
-                swayStart
                 kitty
                 starship
                 glow
+                bat
                 i3status-rust
                 vulkan-validation-layers
                 vulkan-tools
@@ -269,6 +270,19 @@
                 fish
                 helix
                 atuin
+
+                #fonts
+                fira-code
+                fira
+                cooper-hewitt
+                ibm-plex
+                jetbrains-mono
+                iosevka
+                # bitmap
+                spleen
+                fira-code-symbols
+                powerline-fonts
+                nerdfonts
 
                 # # to get fish to build
                 # linux-manual
@@ -321,9 +335,9 @@
                 desktopDir = homeDir + "Desktop/";
                 documentsDir = homeDir + "Documents/";
               in ''
-                mkdir -p ${desktopDir} ${documentsDir} ${configDir}
+                mkdir -p ${desktopDir} ${documentsDir} 
                 chown nixos ${homeDir} ${desktopDir} ${documentsDir}
-                cp -R ${localConfig} ${configDir}
+                cp -R ${localConfig}/config ${configDir}
                 cp -R ${self}/contrib/* ${homeDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
                 ln -sfT ${self} ${documentsDir}/YubiKey-Guide

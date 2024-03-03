@@ -38,6 +38,9 @@ focus_follows_mouse yes
 ################################### Theme Settings ########################################
 ##########################################################################################
 
+# set wallpaper
+output * bg ~/.config/sway/bg.jpg fill
+
 # default border pixel size
 default_border pixel 3
 
