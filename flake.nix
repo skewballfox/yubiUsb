@@ -383,9 +383,9 @@
                 documentsDir = homeDir + "Documents/";
               in ''
                 mkdir -p ${desktopDir} ${documentsDir} ${configDir}
-                chown -R nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
                 cp -R ${localConfig}/config/* ${configDir}
                 cp -R ${self}/drduh/* ${homeDir}
+                chown -R nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
                 ln -sfT ${self} ${documentsDir}/YubiKey-Guide
               '';
