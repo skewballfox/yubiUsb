@@ -19,11 +19,11 @@
     "localConfig": {
       "flake": false,
       "locked": {
-        "lastModified": 1709504297,
-        "narHash": "sha256-mC7v5DP4RC81ExcC70QAewRzTUE33AE8E7kVbAKVL4s=",
+        "lastModified": 1709586285,
+        "narHash": "sha256-nKJYCYUvshJyQ5eZBohViPJREIfPhfMI4qVpBGbxV4c=",
         "owner": "skewballfox",
         "repo": "live_config",
-        "rev": "a46dfb2352f6f99ece97242717a30fbe327cf229",
+        "rev": "f5a1fb43f4a279cad4062f127fabf65686d9314d",
         "type": "github"
       },
       "original": {
