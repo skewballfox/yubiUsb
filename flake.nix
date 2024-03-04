@@ -187,7 +187,6 @@
                   wrapperFeatures.base = true;
                   wrapperFeatures.gtk = true;
                   extraSessionCommands = ''
-                  export XDG_DATA_HOME="$HOME/.local/share"
                   export QT_QPA_PLATFORM=wayland
                   export QT_QPA_PLATFORMTHEME=qt5ct
                   export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
@@ -204,8 +203,6 @@
                   # https://stackoverflow.com/questions/33424736/intellij-idea-14-on-arch-linux-opening-to-grey-screen/34419927#34419927
                   export _JAVA_AWT_WM_NONREPARENTING=1
 
-                  #necessary for tumbler apparently
-                  export XDG_CACHE_HOME=$HOME/.cache
                   
                   #stuff to try to get gnome-pinentry and seahorse
                   #to properly work
@@ -245,6 +242,15 @@
                   initialHashedPassword = "";
                 };
                 root.initialHashedPassword = "";
+              };
+
+              # why no curly?
+              # https://discourse.nixos.org/t/fish-error-through-ssh/18499/11?u=skewballfox
+              environment.sessionVariables = {
+                      XDG_CACHE_HOME  = "\$HOME/.cache";
+                      XDG_CONFIG_HOME = "\$HOME/.config";
+                      XDG_BIN_HOME    = "\$HOME/.local/bin";
+                      XDG_DATA_HOME   = "\$HOME/.local/share";
               };
 
               security = {
@@ -383,7 +389,7 @@
                 documentsDir = homeDir + "Documents/";
               in ''
                 mkdir -p ${desktopDir} ${documentsDir} ${configDir}
-                cp -R ${localConfig}/config/* ${configDir}
+                cp -RL ${localConfig}/config/* ${configDir}
                 cp -R ${self}/drduh/* ${homeDir}
                 chown -R nixos ${homeDir} ${desktopDir} ${documentsDir} ${configDir}
                 ln -sf ${yubikeyGuide}/share/applications/yubikey-guide.desktop ${desktopDir}
@@ -397,7 +403,6 @@
   in {
     nixosConfigurations.yubikeyLive.x86_64-linux = mkSystem "x86_64-linux";
     nixosConfigurations.yubikeyLive.aarch64-linux = mkSystem "aarch64-linux";
-    #nixosConfigurations.yubikeyLive.qemu = mkSystem
     formatter.x86_64-linux = (import nixpkgs {system = "x86_64-linux";}).alejandra;
     formatter.aarch64-linux = (import nixpkgs {system = "aarch64-linux";}).alejandra;
   };
