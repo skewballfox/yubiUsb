@@ -217,6 +217,8 @@
                   export WLR_RENDERER=vulkan
                   '';
                 };
+                
+                  
               };
 
               fonts.packages = with pkgs; [
@@ -325,6 +327,10 @@
                 diceware
                 pwgen
 
+                # for QR encoding/decoding
+                qrencode
+                zbar
+
                 # Might be useful beyond the scope of the guide
                 cfssl
                 pcsctools
@@ -377,6 +383,9 @@
                 [ ! -f "$GNUPGHOME/gpg.conf" ] && cp --verbose "${drduhConfig}/gpg.conf" "$GNUPGHOME/gpg.conf"
                 [ ! -f "$GNUPGHOME/gpg-agent.conf" ] && cp --verbose ${gpgAgentConf} "$GNUPGHOME/gpg-agent.conf"
                 echo "\$GNUPGHOME is \"$GNUPGHOME\""
+
+                eval "\$(starship init bash)"
+                eval "\$(atuin init bash)"
               '';
 
               # Copy the contents of contrib to the home directory, add a
