@@ -384,8 +384,8 @@
                 [ ! -f "$GNUPGHOME/gpg-agent.conf" ] && cp --verbose ${gpgAgentConf} "$GNUPGHOME/gpg-agent.conf"
                 echo "\$GNUPGHOME is \"$GNUPGHOME\""
 
-                eval "\$(starship init bash)"
-                eval "\$(atuin init bash)"
+                eval "$(starship init bash)"
+                eval "$(atuin init bash)"
               '';
 
               # Copy the contents of contrib to the home directory, add a
