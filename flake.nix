@@ -2,7 +2,7 @@
   description = "A Nix Flake for a gui optional swayfx-based system with YubiKey setup";
   
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     drduhConfig.url = "github:drduh/config";
     # this should work. see https://discourse.nixos.org/t/flakes-re-locking-necessary-at-each-evaluation-when-import-sub-flake-by-path/34465/6
     localConfig.url = "github:skewballfox/live_config";
@@ -340,7 +340,7 @@
                 fish
                 helix
                 atuin
-
+                fzf
                 
 
                 # # to get fish to build
@@ -374,7 +374,6 @@
               # ephemeral location and configure GPG with the guide's
 
               environment.interactiveShellInit = ''
-                unset HISTFILE
                 export GNUPGHOME="/run/user/$(id -u)/gnupg"
                 if [ ! -d "$GNUPGHOME" ]; then
                   echo "Creating \$GNUPGHOME…"
