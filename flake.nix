@@ -117,16 +117,14 @@
                 cpu.amd.updateMicrocode = true;
                 #enableAllFirmware = true;
                 enableRedistributableFirmware = true;
-                opengl = {
+                graphics = {
                   enable = true;
-                  
-                  
                   extraPackages = with pkgs; [ amdvlk vulkan-validation-layers vaapiVdpau libvdpau-va-gl ];
-                  # For 32 bit applications 
                   extraPackages32 = with pkgs; [
                     driversi686Linux.amdvlk
                   ];
                 };
+                
                 # nvidia = {
                 #   package = config.boot.kernelPackages.nvidiaPackages.vulkan_beta;
                 #   #package = pkgs.linuxKernel.packages.linux_zen.nvidia_x11_production_open;
@@ -155,10 +153,12 @@
                   alsa.support32Bit = true;
                   pulse.enable = true;
                 };
+                libinput.enable = true;
+
                 xserver = {
                   enable = true;
                   videoDrivers = [ "modesetting" "fbdev" "amdgpu" ];
-                  libinput.enable = true;
+                  
                 };
                 
                 
