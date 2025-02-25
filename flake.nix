@@ -119,8 +119,8 @@
                 enableRedistributableFirmware = true;
                 opengl = {
                   enable = true;
-                  driSupport = true;
-                  driSupport32Bit = true;
+                  
+                  
                   extraPackages = with pkgs; [ amdvlk vulkan-validation-layers vaapiVdpau libvdpau-va-gl ];
                   # For 32 bit applications 
                   extraPackages32 = with pkgs; [
