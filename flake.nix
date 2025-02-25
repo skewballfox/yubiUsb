@@ -321,7 +321,8 @@
 
                 # Testing
                 ent
-                haskellPackages.hopenpgp-tools
+                #currently broken as of 02/25/2025
+                #haskellPackages.hopenpgp-tools
 
                 # Password generation tools
                 diceware
